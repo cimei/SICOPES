@@ -1242,6 +1242,7 @@ def cargaSICONV():
             data_lines = csv.DictReader(data,delimiter=';')
 
             convenios = []
+            convenios_nr = []
 
             # PEGA NOME DO PRIMEIRO CAMPO, POIS COSTUAM VIR COM CARACTER ESTRANHO NO INÍCIO (?)
 
@@ -1255,47 +1256,55 @@ def cargaSICONV():
             for line in data_lines:
                 if line['ID_PROPOSTA'] in [item['ID_PROPOSTA'] for item in programa_proposta]:
 
-                    convenios.append(line)
+                    if line[nr_convenio_campo] not in convenios_nr:
 
-                    convenio_gravar = Convenio(NR_CONVENIO                   = line[nr_convenio_campo],
-                                               ID_PROPOSTA                   = line['ID_PROPOSTA'],
-                                               DIA                           = line['DIA'],
-                                               MES                           = line['MES'],
-                                               ANO                           = line['ANO'],
-                                               DIA_ASSIN_CONV                = line['DIA_ASSIN_CONV'],
-                                               SIT_CONVENIO                  = line['SIT_CONVENIO'],
-                                               SUBSITUACAO_CONV              = line['SUBSITUACAO_CONV'],
-                                               SITUACAO_PUBLICACAO           = line['SITUACAO_PUBLICACAO'],
-                                               INSTRUMENTO_ATIVO             = line['INSTRUMENTO_ATIVO'],
-                                               IND_OPERA_OBTV                = line['IND_OPERA_OBTV'],
-                                               NR_PROCESSO                   = line['NR_PROCESSO'],
-                                               UG_EMITENTE                   = line['UG_EMITENTE'],
-                                               DIA_PUBL_CONV                 = line['DIA_PUBL_CONV'],
-                                               DIA_INIC_VIGENC_CONV          = line['DIA_INIC_VIGENC_CONV'],
-                                               DIA_FIM_VIGENC_CONV           = data_banco(line['DIA_FIM_VIGENC_CONV']),
-                                               DIA_FIM_VIGENC_ORIGINAL_CONV  = line['DIA_FIM_VIGENC_ORIGINAL_CONV'],
-                                               DIAS_PREST_CONTAS             = line['DIAS_PREST_CONTAS'],
-                                               DIA_LIMITE_PREST_CONTAS       = line['DIA_LIMITE_PREST_CONTAS'],
-                                               SITUACAO_CONTRATACAO          = line['SITUACAO_CONTRATACAO'],
-                                               IND_ASSINADO                  = line['IND_ASSINADO'],
-                                               MOTIVO_SUSPENSAO              = line['MOTIVO_SUSPENSAO'],
-                                               IND_FOTO                      = line['IND_FOTO'],
-                                               QTDE_CONVENIOS                = line['QTDE_CONVENIOS'],
-                                               QTD_TA                        = line['QTD_TA'],
-                                               QTD_PRORROGA                  = line['QTD_PRORROGA'],
-                                               VL_GLOBAL_CONV                = valor_banco(line['VL_GLOBAL_CONV']),
-                                               VL_REPASSE_CONV               = valor_banco(line['VL_REPASSE_CONV']),
-                                               VL_CONTRAPARTIDA_CONV         = valor_banco(line['VL_CONTRAPARTIDA_CONV']),
-                                               VL_EMPENHADO_CONV             = valor_banco(line['VL_EMPENHADO_CONV']),
-                                               VL_DESEMBOLSADO_CONV          = valor_banco(line['VL_DESEMBOLSADO_CONV']),
-                                               VL_SALDO_REMAN_TESOURO        = valor_banco(line['VL_SALDO_REMAN_TESOURO']),
-                                               VL_SALDO_REMAN_CONVENENTE     = valor_banco(line['VL_SALDO_REMAN_CONVENENTE']),
-                                               VL_RENDIMENTO_APLICACAO       = valor_banco(line['VL_RENDIMENTO_APLICACAO']),
-                                               VL_INGRESSO_CONTRAPARTIDA     = valor_banco(line['VL_INGRESSO_CONTRAPARTIDA']),
-                                               VL_SALDO_CONTA                = valor_banco(line['VL_SALDO_CONTA']),
-                                               VALOR_GLOBAL_ORIGINAL_CONV    = valor_banco(line['VALOR_GLOBAL_ORIGINAL_CONV']))
+                        convenios.append(line)
+                        convenios_nr.append(line[nr_convenio_campo])
 
-                    db.session.add(convenio_gravar)
+                        convenio_gravar = Convenio(NR_CONVENIO                   = line[nr_convenio_campo],
+                                                    ID_PROPOSTA                   = line['ID_PROPOSTA'],
+                                                    DIA                           = line['DIA'],
+                                                    MES                           = line['MES'],
+                                                    ANO                           = line['ANO'],
+                                                    DIA_ASSIN_CONV                = line['DIA_ASSIN_CONV'],
+                                                    SIT_CONVENIO                  = line['SIT_CONVENIO'],
+                                                    SUBSITUACAO_CONV              = line['SUBSITUACAO_CONV'],
+                                                    SITUACAO_PUBLICACAO           = line['SITUACAO_PUBLICACAO'],
+                                                    INSTRUMENTO_ATIVO             = line['INSTRUMENTO_ATIVO'],
+                                                    IND_OPERA_OBTV                = line['IND_OPERA_OBTV'],
+                                                    NR_PROCESSO                   = line['NR_PROCESSO'],
+                                                    UG_EMITENTE                   = line['UG_EMITENTE'],
+                                                    DIA_PUBL_CONV                 = line['DIA_PUBL_CONV'],
+                                                    DIA_INIC_VIGENC_CONV          = line['DIA_INIC_VIGENC_CONV'],
+                                                    DIA_FIM_VIGENC_CONV           = data_banco(line['DIA_FIM_VIGENC_CONV']),
+                                                    DIA_FIM_VIGENC_ORIGINAL_CONV  = line['DIA_FIM_VIGENC_ORIGINAL_CONV'],
+                                                    DIAS_PREST_CONTAS             = line['DIAS_PREST_CONTAS'],
+                                                    DIA_LIMITE_PREST_CONTAS       = line['DIA_LIMITE_PREST_CONTAS'],
+                                                    SITUACAO_CONTRATACAO          = line['SITUACAO_CONTRATACAO'],
+                                                    IND_ASSINADO                  = line['IND_ASSINADO'],
+                                                    MOTIVO_SUSPENSAO              = line['MOTIVO_SUSPENSAO'],
+                                                    IND_FOTO                      = line['IND_FOTO'],
+                                                    QTDE_CONVENIOS                = line['QTDE_CONVENIOS'],
+                                                    QTD_TA                        = line['QTD_TA'],
+                                                    QTD_PRORROGA                  = line['QTD_PRORROGA'],
+                                                    VL_GLOBAL_CONV                = valor_banco(line['VL_GLOBAL_CONV']),
+                                                    VL_REPASSE_CONV               = valor_banco(line['VL_REPASSE_CONV']),
+                                                    VL_CONTRAPARTIDA_CONV         = valor_banco(line['VL_CONTRAPARTIDA_CONV']),
+                                                    VL_EMPENHADO_CONV             = valor_banco(line['VL_EMPENHADO_CONV']),
+                                                    VL_DESEMBOLSADO_CONV          = valor_banco(line['VL_DESEMBOLSADO_CONV']),
+                                                    VL_SALDO_REMAN_TESOURO        = valor_banco(line['VL_SALDO_REMAN_TESOURO']),
+                                                    VL_SALDO_REMAN_CONVENENTE     = valor_banco(line['VL_SALDO_REMAN_CONVENENTE']),
+                                                    VL_RENDIMENTO_APLICACAO       = valor_banco(line['VL_RENDIMENTO_APLICACAO']),
+                                                    VL_INGRESSO_CONTRAPARTIDA     = valor_banco(line['VL_INGRESSO_CONTRAPARTIDA']),
+                                                    VL_SALDO_CONTA                = valor_banco(line['VL_SALDO_CONTA']),
+                                                    VALOR_GLOBAL_ORIGINAL_CONV    = valor_banco(line['VALOR_GLOBAL_ORIGINAL_CONV']))
+
+                        db.session.add(convenio_gravar)
+                    
+                    else:
+
+                        print ('<<',dt.now().strftime("%x %X"),'>> ','Convênio '+str(line[nr_convenio_campo])+' não incluído. DUPLICADO!')
+
 
             db.session.commit()
 
@@ -1353,7 +1362,7 @@ def cargaSICONV():
                         if seen[x['ID_EMPENHO']] == 1:
                             dupes.append(x['ID_EMPENHO'])
                         seen[x['ID_EMPENHO']] += 1
-            print ('**** ID_EMPENHO duplicados:  ',dupes)
+            print ('<<',dt.now().strftime("%x %X"),'>> ','ID_EMPENHO duplicados: ',dupes)
 
             db.session.commit()
 

@@ -1,5 +1,9 @@
 ## Atualizações ##
 
+31/10/2023
+Tratamento da ocorrência de duplicidade de convênios na carga siconv.
+v5.0.6
+
 14/09/2023
 Correção na inclusão de chamada em convênio
 v5.0.5
