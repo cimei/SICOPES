@@ -25,7 +25,7 @@
 
 # core/views.py
 
-from flask import render_template,url_for,flash, redirect,request,Blueprint
+from flask import render_template,url_for,flash, redirect,request,Blueprint,abort
 from flask_login import login_required, current_user
 from sqlalchemy import func, distinct, and_, or_
 from sqlalchemy.sql import label
@@ -254,7 +254,9 @@ def consultaDW(**entrada):
                             encoding="UTF-8"
                             )
     c = conn.cursor()
+
     c.execute(sql)
+    
     res = c.fetchall()
             
     c.close()
@@ -294,6 +296,7 @@ def chamadas_DW():
     cn = ca = pn = pa = fn = fm = 0 # contadores de chamadas e processos 
 
     print ('*** Consulta ao DW e carga no banco do SICOPES: Chamadas, mães e filhos')
+    registra_log_auto(id_user,None,'car - Inciada consulta DW e carga no SICOPES.')
 
     for p in programas:
         # pega no DW dados de todas as chamadas de cada um dos programas identificados
@@ -632,7 +635,7 @@ def chamadas_DW():
 
     db.session.commit()
 
-    registra_log_auto(id_user,None,'car')
+    registra_log_auto(id_user,None,'car - Finalizada Consulta ao DW e carga no SICOPES.')
 
 
     return [cn,ca,pn,pa,fn,fm]
@@ -997,6 +1000,7 @@ def cargaSICONV():
     print ('*****************************************************************')
     print ('<<',dt.now().strftime("%x %X"),'>> ','Downloading and unpacking SICONV files...')
     print ('*****************************************************************')
+    registra_log_auto(id,None,'car - download e descompactação.')
 
     #url_base = 'http://portal.convenios.gov.br/images/docs/CGSIS/csv/'
     #url_base = 'http://plataformamaisbrasil.gov.br/images/docs/CGSIS/csv/'
@@ -1057,6 +1061,7 @@ def cargaSICONV():
             print ('<<',dt.now().strftime("%x %X"),'>> ','Descompactou ' + arquivo)
 
         print ('*****************************************************************')
+        registra_log_auto(id,None,'car - descompactou arquivos.')
 
         ## caso o urlretrieve seja deprecado, usar o urlopen e gravar o arquivo de destino
         #for arquivo in arquivos:
@@ -1103,6 +1108,7 @@ def cargaSICONV():
 
         print ('*****************************************************************')
         print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando dados de programas...')
+        registra_log_auto(id,None,'car - carregando dados de programas.')
 
         # pega código da instituição para resgate dos programas associados
         cod_inst = db.session.query(RefSICONV.cod_inst).first()
@@ -1155,6 +1161,7 @@ def cargaSICONV():
     if carrega_propostas == 'sim':
 
         print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando dados de propostas...')
+        registra_log_auto(id,None,'car - carregando dados de propostas.')
         #lista dos identificadores de programas
         ids_programas = [id[0] for id in programas_unic]
 
@@ -1234,6 +1241,7 @@ def cargaSICONV():
     if carrega_convenios == 'sim':
 
         print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando dados de convênios...')
+        registra_log_auto(id,None,'car - carregando dados de convênios.')
         # abre csv de propostas e gera a lista data_lines
         arq = 'siconv_convenio'
         arq = os.path.normpath(pasta_compactados+'/'+arq+'.csv')
@@ -1320,6 +1328,7 @@ def cargaSICONV():
     if carrega_empenhos == 'sim':
 
         print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando dados de empenhos...')
+        registra_log_auto(id,None,'car - carregando dados de empenhos.')
         # abre csv de empenho e gera a lista data_lines
         empenhos = []
         arq = 'siconv_empenho'
@@ -1389,6 +1398,7 @@ def cargaSICONV():
                 empenho_desembolso.append(line)
 
         print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando dados de desembolso...')
+        registra_log_auto(id,None,'car - carregando dados de desembolso.')
 
         # abre csv de desembolso e gera a lista data_lines
         desembolsos = []
@@ -1444,6 +1454,7 @@ def cargaSICONV():
     if carrega_pagamentos == 'sim':
 
         print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando dados de pagamentos...')
+        registra_log_auto(id,None,'car - carregando dados de pagamentos.')
         # abre csv de pagamento e gera a lista data_lines
         pagamentos = []
 
@@ -1482,6 +1493,7 @@ def cargaSICONV():
     if carrega_crono_desemb == 'sim':
 
         print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando dados de cronograma_desembolso...')
+        registra_log_auto(id,None,'car - carregando dados de cronograma_desembolso.')
 
         # abre csv de cronograma_desembolso e gera a lista data_lines
 
@@ -1522,6 +1534,7 @@ def cargaSICONV():
     if carrega_plano_aplic == 'sim':
 
         print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando dados de plano de aplicação...')
+        registra_log_auto(id,None,'car - carregando dados de plano de aplicação.')
         # abre csv de propostas e gera a lista data_lines
         arq = 'siconv_plano_aplicacao'
         arq = os.path.normpath(pasta_compactados+'/'+arq+'.csv')
@@ -1563,6 +1576,7 @@ def cargaSICONV():
     ##             pegar data de referência SICONV           ##
     ##########################################################
     print ('<<',dt.now().strftime("%x %X"),'>> ','Carregando data dos dados...')
+    registra_log_auto(id,None,'car - carregando data dos dados.')
     # abre csv de com data da carga e gera a lista data_lines
     arq = 'data_carga_siconv'
     arq = os.path.normpath(pasta_compactados+'/'+arq+'.csv')
@@ -1589,7 +1603,7 @@ def cargaSICONV():
     print ('<<',dt.now().strftime("%x %X"),'>> ','Carga SICONV finalizada!')
     print ('*****************************************************************')
 
-    registra_log_auto(id,None,'car')
+    registra_log_auto(id,None,'car - carga SICONV finalizada.')
 
 
 # função que executa thread de carga dos dados SICONV
@@ -1650,7 +1664,7 @@ def index():
             except:
                 sched.reschedule_job(id_1, trigger='cron', day_of_week=dia_semana, hour=hora, minute=minuto)
 
-            registra_log_auto(id_user,None,'agi')    
+            registra_log_auto(id_user,None,'agi - agendamento cargaSICONV.')    
 
         # AGENDA CARGA DW NA INICIALIZAÇÃO DO SISTEMA
         
@@ -1679,7 +1693,7 @@ def index():
             except:
                 sched.reschedule_job(id_2, trigger='cron', day=dia, hour=hora, minute=minuto)
 
-            registra_log_auto(id_user,None,'agi')    
+            registra_log_auto(id_user,None,'agi - agendamento chamadas_DW.')    
         
     return render_template ('index.html',sistema=sistema) 
 
@@ -1771,7 +1785,7 @@ def carregaSICONV():
     #assíncrono
     # cargaSICONV()
    
-    registra_log_auto(current_user.id,None,'car')
+    registra_log_auto(current_user.id,None,'car - carga SICONV')
 
     #return render_template('index.html')
     return redirect(url_for('core.inicio'))

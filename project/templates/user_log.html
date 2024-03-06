@@ -116,7 +116,12 @@
         {% if registro.tipo_registro[0:3] == 'man' %}
           <td><p align = "left"><small><b>Observação do usuário: </b> {{registro.tipo_registro[5:]}} {% if registro.duracao > 0 %} - Tempo registrado: {{registro.duracao}} min. {% endif %}</small></p></td>
         {% else %}
-          <td><p align = "left"><small> {{registro.desc_registro}} {% if registro.duracao > 0 %} - Tempo registrado: {{registro.duracao}} min. {% endif %}</small></p></td>
+          <td><p align = "left"><small> {% if registro.desc_registro %} 
+                                          {{registro.desc_registro}} 
+                                        {% elif registro.tipo_registro %}
+                                          {{registro.tipo_registro}}
+                                        {% endif %}  
+                                        {% if registro.duracao > 0 %} - Tempo registrado: {{registro.duracao}} min. {% endif %}</small></p></td>
         {% endif %}
       </tr>
 

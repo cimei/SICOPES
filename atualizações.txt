@@ -1,5 +1,9 @@
 ## Atualizações ##
 
+06/03/2024
+Mensagens de carga no diário.
+v5.0.7
+
 31/10/2023
 Tratamento da ocorrência de duplicidade de convênios na carga siconv.
 v5.0.6
