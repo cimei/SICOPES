@@ -30,8 +30,9 @@
         <th scope="col"><p align = "center">Mod.-Nív.</p></th>
         <th scope="col"><p align = "center">Sit.</p></th>
         <th scope="col"><p align = "center">Vigência</p></th>
-        <th scope="col"><p align = "center">Qtd. Pagamentos</p></th>
-        <th scope="col"><p align = "center">Valor Pago</p></th>
+        <th scope="col"><p align = "center"><abbr title="Quantidade de pagamentos efetuados ao bolsista.">Qtd. Pag.</abbr></p></th>
+        <th scope="col"><p align = "center"><abbr title="Valor total pago ao bolsista até a última carga.">Pago Total</abbr></p></th>
+        <th scope="col"><p align = "center"><abbr title="Quantidade de pagamentos a realizar.">Qtd. a pag.</abbr></p></th>
       </tr>
     </thead>
     <tbody>
@@ -48,6 +49,7 @@
           <td><p align = "center"> {{filho.inic_filho.strftime("%x")}} a {{filho.term_filho.strftime("%x")}} </p></td>
           <td><p align = "center"> {{filho.mens_pagas}} </p></td>
           <td><p align = "right">  {{filho.pago_total|converte_para_real}} </p></td>
+          <td><p align = "center"> {{filho.mens_apagar}} </p></td>
         </tr>
       {% endfor %}
     </tbody>

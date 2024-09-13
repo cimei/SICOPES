@@ -50,19 +50,7 @@ class AcordoForm(FlaskForm):
     data_fim         = DateField('Data de término:',format='%Y-%m-%d', validators=(Optional(),))#,validators=[DataRequired(message="Informe data do término!")])
     valor_cnpq       = StringField('Valor CNPq:',validators=[DataRequired(message="Informe o valor!")])
     valor_epe        = StringField('Valor EP:',validators=[DataRequired(message="Informe o valor!")])
-    situ             = SelectField('Situação:',choices=[('',''),
-                                  ('Preparação','Preparação'),
-                                  ('Assinado','Assinado'),
-                                  ('Vigente-Esquecido','Vigente-Esquecido'),
-                                  ('Aguarda Folha','Aguarda Folha'),
-                                  ('Vigente','Vigente'),
-                                  ('Expirado (sem RTF)','Expirado (sem RTF)'),
-                                  ('Expirado (RTF aguarda análise)','Expirado (RTF aguarda análise)'),
-                                  ('Expirado (RTF aprovado, mas há processo(s) à finalizar)','Expirado (RTF aprovado, mas há processo(s) à finalizar)'),
-                                  ('Expirado (RTF APROVADO!)','Expirado (RTF APROVADO!)'),
-                                  ('Expirado (sit. 71 mãe(s), mas há filho(s) pendente(s))','Expirado (sit. 71 mãe(s), mas há filho(s) pendente(s))'),
-                                  ('Expirado (sit. 71 mãe(s) e filho(s))','Expirado (sit. 71 mãe(s) e filho(s))'),
-                                  ('Não executado','Não executado')])
+    situacao         = SelectField('Situação:')
     capital          = StringField('Capital:',validators=[DataRequired(message="Informe o valor destinado a capital!")])
     custeio          = StringField('Custeio:',validators=[DataRequired(message="Informe o valor destinado a custeio!")])
     bolsas           = StringField('Bolsas:',validators=[DataRequired(message="Informe o valor destinado a bolsas!")]) 

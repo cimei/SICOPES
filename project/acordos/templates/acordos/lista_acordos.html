@@ -66,8 +66,10 @@
       {% endif %}    
       
       <div class = "col">
-        <p align="right"><a href=/static/acordos.csv class="btn btn-outline-primary" role="button" aria-pressed="true">Download do csv</a></p>
-      </div>
+        {% if tem_csv %}
+          <p align="right"><a href=/static/acordos.csv class="btn btn-outline-primary" role="button" aria-pressed="true">Download do csv</a></p>
+        {% endif %}
+        </div>
 
   </div>
 </caption>
@@ -93,12 +95,13 @@
         <th scope="col" data-field="Situação" data-filter-control="input" data-sortable="true"><p align = "center">Situação</p></th>
         <th scope="col" data-sortable="true"><p align = "center">Ini.</p></th>
         <th scope="col" data-sortable="true"><p align = "center">Fim</p></th>
-        <th scope="col"><p align = "center">Global (R$)</p></th>
+        <th scope="col"><p align = "center"><abbr title="O valor de bolsas no cadastro do acordo.">CNPq Bolsas (R$)</abbr></p></th>
         <th scope="col"><p align = "center">Cham./Enc.</p></th>
         <th scope="col"><p align = "center">Processos</p></th>
         <th scope="col"><p align = "center">Filhos</p></th>
-        <th scope="col"><p align = "center">Pago</p></th>
-        <th scope="col"><p align = "center">Saldo</p></th>
+        <th scope="col"><p align = "center"><abbr title="O que foi pago até à data da carga, conforme o DW.">Pago</abbr></p></th>
+        <th scope="col"><p align = "center"><abbr title="O valor registrado da bolsa vezes a quantidade de dias entre o final da vigência e a data da carga.">A pagar</abbr></p></th>
+        <th scope="col"><p align = "center"><abbr title="O valor de bolsas no cadastro do acordo, menos o pago e o a pagar.">Saldo</abbr></p></th>
       </tr>
     </thead>
     <tbody>
@@ -177,8 +180,8 @@
             <td><p align = "center"> <small> {{acordo[7].strftime('%x')}}</small> </p></td>
           {% endif %}
         {% endif %}
-        <!-- valor_global -->
-        <td><p align = "right"><small>{{acordo[24]|converte_para_real}}</small></p></td>
+        <!-- valor_bolsas-->
+        <td><p align = "right"><small>{{acordo[26]|converte_para_real}}</small></p></td>
         <!-- qtd_cha -->
         <td><p align = "center">
           {% if acordo[23] %}
@@ -211,8 +214,10 @@
         {% endif %}
         <!-- pago_acordo -->      
         <td><p align = "center"><small> {{acordo[12]|converte_para_real}}</small></p></td>
-        <!-- saldo (valor_global - pago_acordo) -->      
-        <td><p align = "center"><small> {{(acordo[24]-acordo[12])|converte_para_real}}</small></p></td>
+        <!-- a pagar (soma do a pagar de todos os bolsistas) -->      
+        <td><p align = "center"><small> {{acordo[25]|converte_para_real}}</small></p></td>
+        <!-- saldo (valor_cnpq - pago_acordo) -->      
+        <td><p align = "center"><small> {{(acordo[9]-acordo[12]-acordo[25])|converte_para_real}}</small></p></td>
       </tr>
 
       {% endfor %}

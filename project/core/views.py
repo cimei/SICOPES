@@ -419,92 +419,136 @@ def chamadas_DW():
                                 db.session.commit()
 
                                 # para cada processo mãe, varre processos filho encontrados no DW
+                                dic_fil_cha = {}
                                 for fil_cha in filhos_chamadas:
 
                                     if fil_cha[3] == pro_cha[2]:  # grava filho se ele for do processo mãe da vez
 
+                                        # carrega dicionário com valores obtidos do processo filho
+                                        dic_fil_cha['COD_PROGRAMA']   = fil_cha[0]
+                                        dic_fil_cha['NOME_CHAMADA']   = fil_cha[1]
+                                        dic_fil_cha['PROCESSO']       = fil_cha[2]
+                                        dic_fil_cha['PROCESSO_MAE']   = fil_cha[3]
+                                        dic_fil_cha['INICIO']         = fil_cha[4]
+                                        dic_fil_cha['FIM']            = fil_cha[5]
+                                        dic_fil_cha['SIT']            = fil_cha[6]
+                                        dic_fil_cha['SIT_DETALHE']    = fil_cha[7]
+                                        dic_fil_cha['ESTADO_FOMENTO'] = fil_cha[8]
+                                        dic_fil_cha['TITULO']         = fil_cha[9]
+                                        dic_fil_cha['CPF']            = fil_cha[10]
+                                        dic_fil_cha['PESSOA']         = fil_cha[11]
+                                        dic_fil_cha['MODAL']          = fil_cha[12]
+                                        dic_fil_cha['NIVEL']          = fil_cha[13]
+                                        dic_fil_cha['QTD_BOLSAS']     = fil_cha[14]
+                                        dic_fil_cha['PAGO_BOLSAS']    = fil_cha[15]
+                                        dic_fil_cha['PAGO_CAPITAL']   = fil_cha[16]
+                                        dic_fil_cha['PAGO_CUSTEIO']   = fil_cha[17]
+                                        dic_fil_cha['DTA_CARGA']      = fil_cha[18]
+
+                                        
                                         # ajusta conteúdo de situação caso seja nulo
-                                        if fil_cha[6]:
-                                            situ_filho = fil_cha[6]
-                                            if fil_cha[7]:
-                                                situ_filho = situ_filho + ' ' + fil_cha[7]
-                                        elif fil_cha[8]:
-                                            situ_filho = fil_cha[8]
+                                        if dic_fil_cha['SIT']:
+                                            dic_fil_cha['SIT']
+                                            if dic_fil_cha['SIT_DETALHE']:
+                                                situ_filho = situ_filho + ' ' + dic_fil_cha['SIT_DETALHE']
+                                        elif dic_fil_cha['ESTADO_FOMENTO']:
+                                            situ_filho = dic_fil_cha['ESTADO_FOMENTO']
                                         else: 
                                             situ_filho = ''
 
                                         # zerando valores nulos
-                                        if fil_cha[14]:
-                                            mens_pagas = fil_cha[14]
+                                        if dic_fil_cha['QTD_BOLSAS']:
+                                            mens_pagas = dic_fil_cha['QTD_BOLSAS']
                                         else:
                                             mens_pagas = 0
-                                        if fil_cha[15]:
-                                            pago_total = fil_cha[15]
+                                        if dic_fil_cha['PAGO_BOLSAS']:
+                                            pago_total = dic_fil_cha['PAGO_BOLSAS']
                                         else:
-                                            pago_total = 0    
+                                            pago_total = 0  
+
+                                        # calcular valor a pagar e mensalidades a pagar
+
+                                        bolsa = db.session.query(Bolsa).filter(Bolsa.mod == dic_fil_cha['MODAL'] and Bolsa.niv == dic_fil_cha['NIVEL']).first()
+                                        if bolsa:
+                                            valor_bolsa = bolsa.mensalidade
+                                        else:
+                                            valor_bolsa = 0
+
+                                         # aqui calcula-se a quantidade de meses entre a data da carga e o final da vigencia do filho
+                                         # esta quandidade é inserida no dicionário para ser gravada na tabela ao final
+                                        if situ_filho == 'ATIVACAO Em folha de pagamento' and dic_fil_cha['FIM'] >= dic_fil_cha['DTA_CARGA']:
+                                            dic_fil_cha['MENS_APAGAR'] = (dic_fil_cha['FIM'].year  - dic_fil_cha['DTA_CARGA']) * 12 +\
+                                                        (dic_fil_cha['FIM'].month - dic_fil_cha['DTA_CARGA'].month)
+                                            if dic_fil_cha['MENS_APAGAR'] < 0:
+                                                dic_fil_cha['MENS_APAGAR'] = 0
+                                        else:
+                                            dic_fil_cha['MENS_APAGAR'] = 0 
+
+                                         # Calculando o valor a pagar para o bolsista
+                                        dic_fil_cha['VALOR_APAGAR'] = valor_bolsa * dic_fil_cha['MENS_APAGAR']
 
                                         # formata número do processo filho
-                                        proc_filho_formatado = str(fil_cha[2])[4:10]+'/'+str(fil_cha[2])[:4]+'-'+str(fil_cha[2])[10:]
+                                        proc_filho_formatado = str(dic_fil_cha['PROCESSO'])[4:10]+'/'+str(dic_fil_cha['PROCESSO'])[:4]+'-'+str(dic_fil_cha['PROCESSO'])[10:]
 
                                         fn += 1
                                         novo_proc_filho = Processo_Filho(cod_programa = fil_cha[0],
                                                                          nome_chamada = None,
-                                                                         proc_mae     = str(fil_cha[3])[4:10]+'/'+str(fil_cha[3])[:4]+'-'+str(fil_cha[3])[10:],
+                                                                         proc_mae     = str(dic_fil_cha['PROCESSO_MAE'])[4:10]+'/'+str(dic_fil_cha['PROCESSO_MAE'])[:4]+'-'+str(dic_fil_cha['PROCESSO_MAE'])[10:],
                                                                          processo     = proc_filho_formatado,
-                                                                         nome         = fil_cha[11],
-                                                                         cpf          = fil_cha[10],
-                                                                         modalidade   = fil_cha[12],
-                                                                         nivel        = fil_cha[13],
+                                                                         nome         = dic_fil_cha['PESSOA'],
+                                                                         cpf          = dic_fil_cha['CPF'],
+                                                                         modalidade   = dic_fil_cha['MODAL'],
+                                                                         nivel        = dic_fil_cha['NIVEL'],
                                                                          situ_filho   = situ_filho,
-                                                                         inic_filho   = fil_cha[4],
-                                                                         term_filho   = fil_cha[5],
+                                                                         inic_filho   = dic_fil_cha['INICIO'],
+                                                                         term_filho   = dic_fil_cha['FIM'],
                                                                          mens_pagas   = mens_pagas,
                                                                          pago_total   = pago_total,
-                                                                         valor_apagar = None,
-                                                                         mens_apagar  = None,
-                                                                         dt_ult_pag   = fil_cha[18])
+                                                                         valor_apagar = dic_fil_cha['VALOR_APAGAR'],
+                                                                         mens_apagar  = dic_fil_cha['MENS_APAGAR'],
+                                                                         dt_ult_pag   = dic_fil_cha['DTA_CARGA'])
                                         db.session.add(novo_proc_filho)
 
                                             
 
-                                    elif fil_cha[3] == None: # verificando se ha nesta chamada processos sem mãe, pois além de mães com filho, a chamada pode ter processos de auxílio somente   
+                                    elif dic_fil_cha['PROCESSO_MAE'] == None: # verificando se ha nesta chamada processos sem mãe, pois além de mães com filho, a chamada pode ter processos de auxílio somente   
                                         
                                         # ajusta conteúdo de situação caso seja nulo
-                                        if fil_cha[6]:
-                                            situ_filho = fil_cha[6]
-                                            if fil_cha[7]:
-                                                situ_filho = situ_filho + ' ' + fil_cha[7]
-                                        elif fil_cha[8]:
-                                            situ_filho = fil_cha[8]
+                                        if dic_fil_cha['SIT']:
+                                            situ_filho = dic_fil_cha['SIT']
+                                            if dic_fil_cha['SIT_DETALHE']:
+                                                situ_filho = situ_filho + ' ' + dic_fil_cha['SIT_DETALHE']
+                                        elif dic_fil_cha['ESTADO_FOMENTO']:
+                                            situ_filho = dic_fil_cha['ESTADO_FOMENTO']
                                         else: 
                                             situ_filho = ''  
 
                                         # zerando valores nulos
-                                        if fil_cha[15]:
-                                            pago_bolsas = fil_cha[15]
+                                        if dic_fil_cha['PAGO_BOLSAS']:
+                                            pago_bolsas = dic_fil_cha['PAGO_BOLSAS']
                                         else:
                                             pago_bolsas = 0 
-                                        if fil_cha[16]:
-                                            pago_capital = fil_cha[16]
+                                        if dic_fil_cha['PAGO_CAPITAL']:
+                                            pago_capital = dic_fil_cha['PAGO_CAPITAL']
                                         else:
                                             pago_capital = 0
-                                        if fil_cha[17]:
-                                            pago_custeio = fil_cha[17]
+                                        if dic_fil_cha['PAGO_CUSTEIO']:
+                                            pago_custeio = dic_fil_cha['PAGO_CUSTEIO']
                                         else:
                                             pago_custeio = 0    
                                         
                                         # formata número do processo filho
-                                        proc_filho_formatado = str(fil_cha[2])[4:10]+'/'+str(fil_cha[2])[:4]+'-'+str(fil_cha[2])[10:]
+                                        proc_filho_formatado = str(dic_fil_cha['PROCESSO'])[4:10]+'/'+str(dic_fil_cha['PROCESSO'])[:4]+'-'+str(dic_fil_cha['PROCESSO'])[10:]
 
                                         # verifia se o processo já existe na tabela de processos mãe, não existinto cria, caso contrário atualiza        
                                         proc_mae = db.session.query(Processo_Mae).filter(Processo_Mae.proc_mae == proc_filho_formatado).first()
                                         if not proc_mae:
                                             novo_proc_mae = Processo_Mae(cod_programa = str(fil_cha[0]),
-                                                                         nome_chamada = fil_cha[1],
+                                                                         nome_chamada = dic_fil_cha['NOME_CHAMADA'],
                                                                          proc_mae     = proc_filho_formatado,
-                                                                         inic_mae     = fil_cha[4],
-                                                                         term_mae     = fil_cha[5],
-                                                                         coordenador  = fil_cha[10],
+                                                                         inic_mae     = dic_fil_cha['INICIO'],
+                                                                         term_mae     = dic_fil_cha['FIM'],
+                                                                         coordenador  = dic_fil_cha['CPF'],
                                                                          situ_mae     = situ_filho,
                                                                          id_chamada   = chamada_id,
                                                                          pago_capital = pago_capital,
@@ -514,10 +558,10 @@ def chamadas_DW():
                                             id_proc_mae = novo_proc_mae.id
                                         else:
                                             proc_mae.cod_programa = str(fil_cha[0])
-                                            proc_mae.nome_chamada = fil_cha[1]
-                                            proc_mae.inic_mae     = fil_cha[4]
-                                            proc_mae.term_mae     = fil_cha[5]
-                                            proc_mae.coordenador  = fil_cha[11]  
+                                            proc_mae.nome_chamada = dic_fil_cha['NOME_CHAMADA']
+                                            proc_mae.inic_mae     = dic_fil_cha['INICIO']
+                                            proc_mae.term_mae     = dic_fil_cha['FIM']
+                                            proc_mae.coordenador  = dic_fil_cha['PESSOA']  
                                             proc_mae.situ_mae     = situ_filho
                                             proc_mae.id_chamada   = chamada_id
                                             proc_mae.pago_capital = pago_capital
@@ -550,45 +594,45 @@ def chamadas_DW():
 
                             for fil_cha in filhos_chamadas:
 
-                                if fil_cha[3] == None: # pegando somente os que não tem mãe
+                                if dic_fil_cha['PROCESSO_MAE'] == None: # pegando somente os que não tem mãe
 
                                     # ajusta conteúdo de situação caso seja nulo
-                                    if fil_cha[6]:
-                                        situ_filho = fil_cha[6]
-                                        if fil_cha[7]:
-                                            situ_filho = situ_filho + ' ' + fil_cha[7]
-                                    elif fil_cha[8]:
-                                        situ_filho = fil_cha[8]
+                                    if dic_fil_cha['SIT']:
+                                        situ_filho = dic_fil_cha['SIT']
+                                        if dic_fil_cha['SIT_DETALHE']:
+                                            situ_filho = situ_filho + ' ' + dic_fil_cha['SIT_DETALHE']
+                                    elif dic_fil_cha['ESTADO_FOMENTO']:
+                                        situ_filho = dic_fil_cha['ESTADO_FOMENTO']
                                     else: 
                                         situ_filho = ''
 
                                     # zerando valores nulos
-                                    if fil_cha[15]:
-                                        pago_bolsas = fil_cha[15]
+                                    if dic_fil_cha['PAGO_BOLSAS']:
+                                        pago_bolsas = dic_fil_cha['PAGO_BOLSAS']
                                     else:
                                         pago_bolsas = 0 
-                                    if fil_cha[16]:
-                                        pago_capital = fil_cha[16]
+                                    if dic_fil_cha['PAGO_CAPITAL']:
+                                        pago_capital = dic_fil_cha['PAGO_CAPITAL']
                                     else:
                                         pago_capital = 0
-                                    if fil_cha[17]:
-                                        pago_custeio = fil_cha[17]
+                                    if dic_fil_cha['PAGO_CUSTEIO']:
+                                        pago_custeio = dic_fil_cha['PAGO_CUSTEIO']
                                     else:
                                         pago_custeio = 0
 
                                     
                                     # formata número do processo filho
-                                    proc_filho_formatado = str(fil_cha[2])[4:10]+'/'+str(fil_cha[2])[:4]+'-'+str(fil_cha[2])[10:]
+                                    proc_filho_formatado = str(dic_fil_cha['PROCESSO'])[4:10]+'/'+str(dic_fil_cha['PROCESSO'])[:4]+'-'+str(dic_fil_cha['PROCESSO'])[10:]
 
                                     # verifia se o processo já existe na tabela de processos mãe, não existinto cria, caso contrário atualiza        
                                     proc_mae = db.session.query(Processo_Mae).filter(Processo_Mae.proc_mae == proc_filho_formatado).first()
                                     if not proc_mae:
                                         novo_proc_mae = Processo_Mae(cod_programa = str(fil_cha[0]),
-                                                                        nome_chamada = fil_cha[1],
+                                                                        nome_chamada = dic_fil_cha['NOME_CHAMADA'],
                                                                         proc_mae     = proc_filho_formatado,
-                                                                        inic_mae     = fil_cha[4],
-                                                                        term_mae     = fil_cha[5],
-                                                                        coordenador  = fil_cha[10],
+                                                                        inic_mae     = dic_fil_cha['INICIO'],
+                                                                        term_mae     = dic_fil_cha['FIM'],
+                                                                        coordenador  = dic_fil_cha['CPF'],
                                                                         situ_mae     = situ_filho,
                                                                         id_chamada   = chamada_id,
                                                                         pago_capital = pago_capital,
@@ -598,10 +642,10 @@ def chamadas_DW():
                                         id_proc_mae = novo_proc_mae.id
                                     else:
                                         proc_mae.cod_programa = str(fil_cha[0])
-                                        proc_mae.nome_chamada = fil_cha[1]
-                                        proc_mae.inic_mae     = fil_cha[4]
-                                        proc_mae.term_mae     = fil_cha[5]
-                                        proc_mae.coordenador  = fil_cha[11]  
+                                        proc_mae.nome_chamada = dic_fil_cha['NOME_CHAMADA']
+                                        proc_mae.inic_mae     = dic_fil_cha['INICIO']
+                                        proc_mae.term_mae     = dic_fil_cha['FIM']
+                                        proc_mae.coordenador  = dic_fil_cha['PESSOA']  
                                         proc_mae.situ_mae     = situ_filho
                                         proc_mae.id_chamada   = chamada_id
                                         proc_mae.pago_capital = pago_capital

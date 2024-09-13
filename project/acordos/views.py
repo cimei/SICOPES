@@ -262,7 +262,10 @@ def lista_acordos(lista,coord):
                                             Acordo.desc,
                                             cont_prog.c.qtd_prog,
                                             Acordo.siafi,
-                                            cont_cham.c.qtd_cha)\
+                                            cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                     .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                     .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                     .filter(Acordo.unidade_cnpq.like(unid))\
@@ -284,7 +287,10 @@ def lista_acordos(lista,coord):
                                              Acordo.desc,
                                              cont_prog.c.qtd_prog,
                                              Acordo.siafi,
-                                             cont_cham.c.qtd_cha)\
+                                             cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                     .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                     .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                     .filter(Acordo.unidade_cnpq.in_(unid))\
@@ -308,7 +314,10 @@ def lista_acordos(lista,coord):
                                             Acordo.desc,
                                             cont_prog.c.qtd_prog,
                                             Acordo.siafi,
-                                            cont_cham.c.qtd_cha)\
+                                            cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                     .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                     .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                     .filter(Acordo.unidade_cnpq.like(unid),
@@ -331,7 +340,10 @@ def lista_acordos(lista,coord):
                                              Acordo.desc,
                                              cont_prog.c.qtd_prog,
                                              Acordo.siafi,
-                                             cont_cham.c.qtd_cha)\
+                                             cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                     .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                     .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                     .filter(Acordo.unidade_cnpq.in_(unid),
@@ -359,7 +371,10 @@ def lista_acordos(lista,coord):
                                          Acordo.desc,
                                          cont_prog.c.qtd_prog,
                                          Acordo.siafi,
-                                         cont_cham.c.qtd_cha)\
+                                         cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                   .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                   .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                   .join(grupo_programa_cnpq, grupo_programa_cnpq.id_acordo == Acordo.id)\
@@ -385,7 +400,10 @@ def lista_acordos(lista,coord):
                                          Acordo.desc,
                                          cont_prog.c.qtd_prog,
                                          Acordo.siafi,
-                                        cont_cham.c.qtd_cha)\
+                                        cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                   .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                   .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                   .join(grupo_programa_cnpq, grupo_programa_cnpq.id_acordo == Acordo.id)\
@@ -409,7 +427,10 @@ def lista_acordos(lista,coord):
                                        Acordo.desc,
                                        cont_prog.c.qtd_prog,
                                        Acordo.siafi,
-                                       cont_cham.c.qtd_cha)\
+                                       cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                   .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                   .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                   .filter(Acordo.nome == lista[4:].replace('#$','/'))\
@@ -433,7 +454,10 @@ def lista_acordos(lista,coord):
                                             Acordo.desc,
                                             cont_prog.c.qtd_prog,
                                             Acordo.siafi,
-                                            cont_cham.c.qtd_cha)\
+                                            cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                     .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                     .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                     .filter(Acordo.unidade_cnpq.like(unid),
@@ -457,7 +481,10 @@ def lista_acordos(lista,coord):
                                              Acordo.desc,
                                              cont_prog.c.qtd_prog,
                                              Acordo.siafi,
-                                             cont_cham.c.qtd_cha)\
+                                             cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                     .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                     .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                     .filter(Acordo.unidade_cnpq.in_(unid),
@@ -483,7 +510,10 @@ def lista_acordos(lista,coord):
                                             Acordo.desc,
                                             cont_prog.c.qtd_prog,
                                             Acordo.siafi,
-                                            cont_cham.c.qtd_cha)\
+                                            cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                     .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                     .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                     .join(grupo_programa_cnpq, grupo_programa_cnpq.id_acordo == Acordo.id)\
@@ -510,7 +540,10 @@ def lista_acordos(lista,coord):
                                              Acordo.desc,
                                              cont_prog.c.qtd_prog,
                                              Acordo.siafi,
-                                            cont_cham.c.qtd_cha)\
+                                            cont_cham.c.qtd_cha,
+                                            Acordo.capital,
+                                            Acordo.custeio,
+                                            Acordo.bolsas)\
                                     .outerjoin(cont_cham,cont_cham.c.acordo_id == Acordo.id)\
                                     .outerjoin(cont_prog,cont_prog.c.id_acordo == Acordo.id)\
                                     .join(grupo_programa_cnpq, grupo_programa_cnpq.id_acordo == Acordo.id)\
@@ -533,7 +566,9 @@ def lista_acordos(lista,coord):
                 dias = 999
 
             valor_global = acordo.valor_epe + acordo.valor_cnpq
-            valor_cnpq   = locale.currency(acordo.valor_cnpq, symbol=False, grouping = True)
+            valor_cnpq   = acordo.valor_cnpq
+            valor_bolsas = acordo.bolsas
+            # valor_cnpq   = locale.currency(acordo.valor_cnpq, symbol=False, grouping = True)
             valor_epe    = locale.currency(acordo.valor_epe, symbol=False, grouping = True)
 
             # pega quantidade de mães, filhos do acordo e totaliza o que foi pago
@@ -549,6 +584,7 @@ def lista_acordos(lista,coord):
 
             qtd_filhos_acordo = 0
             pago_acordo = 0
+            a_pagar = 0
 
             for proc in procs_mae:
 
@@ -559,13 +595,16 @@ def lista_acordos(lista,coord):
  
                 filhos = db.session.query(Processo_Filho.proc_mae,
                                           label('qtd_filhos',func.count(Processo_Filho.processo)),
-                                          label('pago_filhos',func.sum(Processo_Filho.pago_total)))\
+                                          label('pago_filhos',func.sum(Processo_Filho.pago_total)),
+                                          label('a_pagar_filhos',func.sum(Processo_Filho.valor_apagar)))\
                                    .filter(Processo_Filho.proc_mae == proc.proc_mae)\
                                    .group_by(Processo_Filho.proc_mae)\
                                    .first()
                 if filhos:                   
                     qtd_filhos_acordo += int(filhos.qtd_filhos)
                     pago_acordo += filhos.pago_filhos
+                    if filhos.a_pagar_filhos != None:
+                        a_pagar += filhos.a_pagar_filhos
 
             # ver como receber valores pagos em capital e custeio para abater no calculo do saldo
             # pago_capital = ....
@@ -636,22 +675,31 @@ def lista_acordos(lista,coord):
                             acordo.qtd_prog,
                             acordo.siafi,
                             acordo.qtd_cha,
-                            valor_global])
+                            valor_global,
+                            a_pagar,
+                            valor_bolsas])
 
-        cria_csv('/app/project/static/acordos.csv',
-                 ['id','***','nome','sei','epe','uf','ini','fim','valor_epe','valor_cnpq','qtd_proc_mae','qtd_filhos','pago','a_pagar','saldo',\
-                  'coord','dias','***','qtd_cpfs','situ','desc','qtd_prog','siafi','valor_global'],
-                 acordos)    
+        try:
+            cria_csv('/app/project/static/acordos.csv',
+                    ['id','***','nome','sei','epe','uf','ini','fim','valor_epe','valor_cnpq','qtd_proc_mae','qtd_filhos','pago','a_pagar','saldo',\
+                    'coord','dias','***','qtd_cpfs','situ','desc','qtd_prog','siafi','valor_global','a_pagar','valor_bolsas'],
+                    acordos)
+            tem_csv = True          
+        except:
+            flash('Arquivo csv não foi criado!','erro') 
+            tem_csv = False             
 
         # o comandinho mágico que permite fazer o download de um arquivo
-        send_from_directory('/app/project/static', 'acordos.csv')                     
+        if tem_csv == True:
+            send_from_directory('/app/project/static', 'acordos.csv')                     
 
         return render_template('lista_acordos.html', 
                                acordos=acordos,
                                quantidade=quantidade,
                                lista=lista,
                                form=form,
-                               data_cha = data_cha)
+                               data_cha = data_cha,
+                               tem_csv = tem_csv)
 
 
 ### VISUALIZAR E ATUALIZAR detalhes de Acordo
@@ -773,6 +821,20 @@ def update(acordo_id,lista):
 
     form.unid.choices = lista_coords
 
+    form.situacao.choices=[('',''),
+                       ('Preparação','Preparação'),
+                       ('Assinado','Assinado'),
+                       ('Vigente-Esquecido','Vigente-Esquecido'),
+                       ('Aguarda Folha','Aguarda Folha'),
+                       ('Vigente-Z','Vigente'),
+                       ('Expirado (sem RTF)','Expirado (sem RTF)'),
+                       ('Expirado (RTF aguarda análise)','Expirado (RTF aguarda análise)'),
+                       ('Expirado (RTF aprovado, mas há processo(s) à finalizar)','Expirado (RTF aprovado, mas há processo(s) à finalizar)'),
+                       ('Expirado (RTF APROVADO!)','Expirado (RTF APROVADO!)'),
+                       ('Expirado (sit. 71 mãe(s), mas há filho(s) pendente(s))','Expirado (sit. 71 mãe(s), mas há filho(s) pendente(s))'),
+                       ('Expirado (sit. 71 mãe(s) e filho(s))','Expirado (sit. 71 mãe(s) e filho(s))'),
+                       ('Não executado','Não executado')]
+
     if form.validate_on_submit():
 
         valor_cnpq = float(form.valor_cnpq.data.replace('.','').replace(',','.'))
@@ -790,21 +852,21 @@ def update(acordo_id,lista):
                    Soma NDs: '+str(locale.currency(round(nds,2), symbol=False, grouping = True ))+')!','perigo')
             # return redirect(url_for('acordos.update', acordo_id=acordo_id, lista=lista))
 
-        acordo.nome          = form.nome.data
-        acordo.sei           = form.sei.data
-        acordo.epe           = form.epe.data
-        acordo.uf            = form.uf.data
-        acordo.data_inicio   = form.data_inicio.data
-        acordo.data_fim      = form.data_fim.data
-        acordo.valor_cnpq    = valor_cnpq
-        acordo.valor_epe     = valor_epe
+        acordo.nome         = form.nome.data
+        acordo.sei          = form.sei.data
+        acordo.epe          = form.epe.data
+        acordo.uf           = form.uf.data
+        acordo.data_inicio  = form.data_inicio.data
+        acordo.data_fim     = form.data_fim.data
+        acordo.valor_cnpq   = valor_cnpq
+        acordo.valor_epe    = valor_epe
         acordo.unidade_cnpq = form.unid.data
-        acordo.situ          = form.situ.data
-        acordo.desc          = form.desc.data
-        acordo.capital       = capital
-        acordo.custeio       = custeio
-        acordo.bolsas        = bolsas
-        acordo.siafi         = form.siafi.data
+        acordo.situ         = form.situacao.data
+        acordo.desc         = form.desc.data
+        acordo.capital      = capital
+        acordo.custeio      = custeio
+        acordo.bolsas       = bolsas
+        acordo.siafi        = form.siafi.data
 
         db.session.commit()
 
@@ -834,7 +896,9 @@ def update(acordo_id,lista):
         form.unid.data = None 
     else:
         form.unid.data = acordo.unidade_cnpq  
-    form.situ.data     = acordo.situ
+    form.situacao.data     = acordo.situ
+    print ('** acordo.situ: ',acordo.situ, type(acordo.situ))
+    print ('** form.situacao.data: ', form.situacao.data, type(form.situacao.data))
     form.capital.data  = locale.currency( acordo.capital, symbol=False, grouping = True )
     form.custeio.data  = locale.currency( acordo.custeio, symbol=False, grouping = True )
     form.bolsas.data   = locale.currency( acordo.bolsas, symbol=False, grouping = True )
@@ -1188,7 +1252,7 @@ def cria_acordo():
                         valor_cnpq    = valor_cnpq,
                         valor_epe     = valor_cnpq,
                         unidade_cnpq = form.unid.data,
-                        situ          = form.situ.data,
+                        situ          = form.situacao.data,
                         capital       = capital,
                         custeio       = custeio,
                         bolsas        = bolsas,
@@ -1808,7 +1872,9 @@ def lista_processos_filho_por_acordo(acordo_id):
                                 Processo_Filho.term_filho,
                                 Processo_Filho.mens_pagas,
                                 Processo_Filho.pago_total,
-                                Processo_Filho.dt_ult_pag)\
+                                Processo_Filho.dt_ult_pag,
+                                Processo_Filho.valor_apagar,
+                                Processo_Filho.mens_apagar)\
                         .filter(Processo_Filho.proc_mae.in_(l_procs_mae))\
                         .order_by(Processo_Filho.situ_filho,Processo_Filho.nome).all()
 

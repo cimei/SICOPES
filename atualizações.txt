@@ -1,5 +1,9 @@
 ## Atualizações ##
 
+13/09/2024
+Cálculo de valor comprometido em acordos.
+v5.0.8
+
 06/03/2024
 Mensagens de carga no diário.
 v5.0.7
